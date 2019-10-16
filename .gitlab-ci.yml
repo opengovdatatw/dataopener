@@ -1,0 +1,114 @@
+image: node:10
+services:
+  - docker:dind
+variables:
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - build
+  - package
+  - test
+  - release
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
+    - dist/
+    - web/.next/
+    - build/
+
+Build:
+  stage: build
+  script:
+    - yarn install
+    - yarn build
+
+Package:
+  stage: package
+  image: docker:latest
+  before_script:
+    - docker login -u gitlab-ci-token -p "${CI_BUILD_TOKEN}" "${CI_REGISTRY}"
+  script:
+    - docker build -t "${CI_PROJECT_NAME}" .
+    - docker tag "${CI_PROJECT_NAME}" "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}"
+    - docker push "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}"
+
+CodeQuality:
+  stage: test
+  script:
+    - yarn test-eslint
+
+UnitTest:
+  stage: test
+  script:
+    - yarn test
+
+.gcloud:
+  image: google/cloud-sdk
+  variables:
+    CI_GCLOUD_REGISTRY: "asia.gcr.io/${GCLOUD_PROJECT_ID}/${CI_PROJECT_NAME}:${CI_COMMIT_SHORT_SHA}"
+    BUILD_ID: $(git describe)-$(date +%y%m%d%H%M)
+  before_script:
+    - echo "${GCLOUD_SERVICE_KEY}" | base64 -d > ${HOME}/gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+    - gcloud --quiet config set project ${GCLOUD_PROJECT_ID}
+    - gcloud --quiet container clusters get-credentials --region ${GCLOUD_COMPUTE_REGION} ${GCLOUD_CLUSTER_NAME}
+  only:
+    - master
+    - tags
+
+Release:
+  stage: release
+  extends: .gcloud
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  script:
+    - gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://asia.gcr.io
+    - docker build -t "${CI_PROJECT_NAME}" .
+    - docker tag "${CI_PROJECT_NAME}" "${CI_GCLOUD_REGISTRY}"
+    - docker push "${CI_GCLOUD_REGISTRY}"
+
+DeployStage:
+  stage: deploy
+  extends: .gcloud
+  image: devth/helm
+  script:
+    - 'sed -r "s/(version: )[0-9\.]+-dev/\1-${CI_COMMIT_TAG:=BUILD_ID}/" -i ./k8s/Chart.yaml'
+    - helm init --service-account tiller --wait --upgrade
+    - helm upgrade
+      --install
+      --namespace default
+      --set image.repository="${CI_GCLOUD_REGISTRY}"
+      --set node.env="stage"
+      --force
+      --wait
+      "${CI_PROJECT_NAME}-stage"
+      ./k8s
+  environment:
+    name: stage
+    url: https://stage.dataopener.tw
+
+DeployProduction:
+  stage: deploy
+  extends: .gcloud
+  image: devth/helm
+  script:
+    - 'sed -r "s/(version: )[0-9\.]+-dev/\1-${CI_COMMIT_TAG:=BUILD_ID}/" -i ./k8s/Chart.yaml'
+    - helm init --service-account tiller --wait --upgrade
+    - helm upgrade
+      --install
+      --namespace default
+      --set image.gu="${CI_GCLOUD_REGISTRY}"
+      --set node.env="production"
+      --force
+      --wait
+      "${CI_PROJECT_NAME}-production"
+      ./k8s
+  environment:
+    name: production
+    url: https://dataopener.tw
+  when: manual
