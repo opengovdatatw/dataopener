@@ -1,46 +1,55 @@
 image: node:10
-services:
-  - docker:dind
+
 variables:
+  GIT_STRATEGY: fetch
+  DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  POSTGRES_DB: dataopener
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: ""
+  POSTGRES_HOST: postgres
+  CI_GITLAB_REGISTRY: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
+  CI_WORKDIR: /usr/src/app
+
+include:
+  - template: Code-Quality.gitlab-ci.yml
 
 stages:
-  - build
   - package
   - test
   - release
   - deploy
 
-cache:
-  paths:
-    - node_modules/
-    - dist/
-    - web/.next/
-    - build/
-
-Build:
-  stage: build
-  script:
-    - yarn install
-    - yarn build
-
-Package:
+docker:
   stage: package
   image: docker:latest
-  before_script:
-    - docker login -u gitlab-ci-token -p "${CI_BUILD_TOKEN}" "${CI_REGISTRY}"
+  services:
+    - docker:19.03.4-dind
   script:
+    - docker login -u gitlab-ci-token -p "${CI_BUILD_TOKEN}" "${CI_REGISTRY}"
     - docker build -t "${CI_PROJECT_NAME}" .
-    - docker tag "${CI_PROJECT_NAME}" "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}"
-    - docker push "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}"
+    - docker tag "${CI_PROJECT_NAME}" "${CI_GITLAB_REGISTRY}"
+    - docker push "${CI_GITLAB_REGISTRY}"
 
-CodeQuality:
+.test:
+  image: $CI_GITLAB_REGISTRY
+  variables:
+    GIT_STRATEGY: none
+  services:
+    - postgres:9.6
+  before_script:
+    - cd "${CI_WORKDIR}"
+
+code_style:
   stage: test
+  extends: .test
   script:
     - yarn test-eslint
 
-UnitTest:
+unit_test:
   stage: test
+  extends: .test
   script:
     - yarn test
 
@@ -58,21 +67,19 @@ UnitTest:
     - master
     - tags
 
-Release:
+release:
   stage: release
   extends: .gcloud
   services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
+    - docker:19.03.4-dind
   script:
+    - docker login -u gitlab-ci-token -p "${CI_BUILD_TOKEN}" "${CI_REGISTRY}"
+    - docker pull "${CI_GITLAB_REGISTRY}"
     - gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://asia.gcr.io
-    - docker build -t "${CI_PROJECT_NAME}" .
-    - docker tag "${CI_PROJECT_NAME}" "${CI_GCLOUD_REGISTRY}"
+    - docker tag "${CI_GITLAB_REGISTRY}" "${CI_GCLOUD_REGISTRY}"
     - docker push "${CI_GCLOUD_REGISTRY}"
 
-DeployStage:
+deploy_stage:
   stage: deploy
   extends: .gcloud
   image: devth/helm
@@ -81,18 +88,13 @@ DeployStage:
     - helm init --service-account tiller --wait --upgrade
     - helm upgrade
       --install
-      --namespace default
       --set image.repository="${CI_GCLOUD_REGISTRY}"
-      --set node.env="stage"
       --force
       --wait
       "${CI_PROJECT_NAME}-stage"
       ./k8s
-  environment:
-    name: stage
-    url: https://stage.dataopener.tw
 
-DeployProduction:
+deploy_production:
   stage: deploy
   extends: .gcloud
   image: devth/helm
@@ -101,14 +103,9 @@ DeployProduction:
     - helm init --service-account tiller --wait --upgrade
     - helm upgrade
       --install
-      --namespace default
-      --set image.gu="${CI_GCLOUD_REGISTRY}"
-      --set node.env="production"
+      --set image.repository="${CI_GCLOUD_REGISTRY}"
       --force
       --wait
       "${CI_PROJECT_NAME}-production"
       ./k8s
-  environment:
-    name: production
-    url: https://dataopener.tw
   when: manual

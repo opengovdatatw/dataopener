@@ -1,0 +1,10 @@
+node:
+  env: stage
+
+image:
+  repository: "nginx:stable"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+configMap: dataopener

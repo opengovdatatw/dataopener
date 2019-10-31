@@ -1,5 +1,5 @@
 {
-  "name": "create-next-example-app",
+  "name": "dataopener",
   "scripts": {
     "develop-server": "yarn build-web; NODE_ENV='development' nodemon ./server/app.js --exec babel-node --watch server",
     "develop-web": "NODE_ENV='development' NODE_WATCH_WEB=1 nodemon ./server/app.js --exec babel-node --watch web",

@@ -2,3 +2,4 @@ build/
 dist/
 .next/
 web/assist/
+k8s/
