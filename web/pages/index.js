@@ -4,8 +4,10 @@ import Document from "../components/Document";
 import Container from "../components/Container";
 import Topbar from "../components/Topbar";
 import Header from "../components/Header";
+import TipicBlock from "../components/TipicBlock";
+import ReportBlock from "../components/ReportBlock";
+import Enter from "../components/Enter";
 import Footer from "../components/Footer";
-import SubTitle from "../components/SubTitle";
 
 const Main = styled.div`
   flex: 1;
@@ -19,9 +21,9 @@ export default function Index() {
         <Topbar />
         <Main>
           <Header />
-          <SubTitle>年度熱門申請主題</SubTitle>
-          <SubTitle>開放資料累積申請數</SubTitle>
-          <SubTitle>小幫手申請成果</SubTitle>
+          <TipicBlock />
+          <ReportBlock />
+          <Enter />
         </Main>
         <Footer />
       </Container>
