@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Button from "./Button";
 
 const Wrapper = styled.div`
   height: 624px;
@@ -10,20 +11,10 @@ const Wrapper = styled.div`
 
 const Content = styled.div`
   font-size: 36px;
+  line-height: 48px;
   color: #283051;
   text-align: center;
-`;
-
-const Button = styled.div`
-  background: #283051;
-  border-radius: 5px;
-  font-size: 21px;
-  color: #ffffff;
-  width: 291px;
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0 20px;
 `;
 
 export default function Footer() {
