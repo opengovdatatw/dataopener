@@ -25,7 +25,7 @@ export default function Footer() {
         <span>推動政府開放資料</span>
         <br />
         <span>需要你的參與！</span>
-        <Button>加入一日資料申請小幫手</Button>
+        <Button href="/application">加入一日資料申請小幫手</Button>
       </Content>
     </Wrapper>
   );

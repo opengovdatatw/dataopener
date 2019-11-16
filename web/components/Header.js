@@ -29,7 +29,7 @@ const Title = styled.div`
   margin: 30px 0;
 `;
 
-const Button = styled.div`
+const Button = styled.a`
   background: #ffffff;
   border-radius: 5px;
   font-size: 18px;
@@ -39,6 +39,7 @@ const Button = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  text-decoration: none;
 `;
 
 export default function Header() {
@@ -46,7 +47,7 @@ export default function Header() {
     <Warpper>
       <Vision>
         <Title>自助資料申請全攻略，讓你申請更有力。</Title>
-        <Button>申請資料</Button>
+        <Button href="/application">申請資料</Button>
       </Vision>
     </Warpper>
   );

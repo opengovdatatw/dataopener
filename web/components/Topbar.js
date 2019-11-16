@@ -15,11 +15,13 @@ const Wrapper = styled.div`
   padding-right: 80px;
 `;
 
+const Logo = styled.a``;
+
 const Tabs = styled.div`
   display: flex;
 `;
 
-const Tab = styled.div`
+const Tab = styled.a`
   color: #fff;
   margin-left: 36px;
 `;
@@ -27,9 +29,11 @@ const Tab = styled.div`
 export default function Topbar() {
   return (
     <Wrapper>
-      <img src="/static/top_logo.png" alt="logo" />
+      <Logo href="/">
+        <img src="/static/top_logo.png" alt="logo" />
+      </Logo>
       <Tabs>
-        <Tab>我要申請</Tab>
+        <Tab href="/application">我要申請</Tab>
         <Tab>搜尋資料</Tab>
         <Tab>機關列表</Tab>
         <Tab>常見問答</Tab>

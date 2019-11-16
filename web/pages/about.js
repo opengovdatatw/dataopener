@@ -78,7 +78,7 @@ export default function Index() {
               <img src="/static/welcome.png" alt="welcome" />
             </Welcome>
             <Slogan>推動政府開放資料，需要你的參與！</Slogan>
-            <Button>加入一日資料申請小幫手</Button>
+            <Button href="/application">加入一日資料申請小幫手</Button>
           </Body>
         </Main>
         <Footer />

@@ -32,7 +32,7 @@ const Links = styled.div`
   display: flex;
 `;
 
-const Link = styled.div`
+const Link = styled.a`
   font-size: 18px;
   color: #ffffff;
   text-decoration: underline;

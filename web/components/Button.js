@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-export default styled.div`
-  background: #283051;
+export default styled.a`
+  background: ${({ color }) => color || "#283051"};
   border-radius: 5px;
   font-size: 21px;
   color: #ffffff;
@@ -11,4 +11,5 @@ export default styled.div`
   align-items: center;
   justify-content: center;
   margin: 20px 0;
+  text-decoration: none;
 `;
