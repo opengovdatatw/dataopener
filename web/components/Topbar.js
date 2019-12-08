@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import PrimaryButton from "./PrimaryButton";
+import Button from "./Button";
 
 const Wrapper = styled.div`
-  background-color: #171b2a;
   height: 100px;
   width: 100%;
   position: absolute;
@@ -13,6 +14,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   padding-left: 80px;
   padding-right: 80px;
+  background-color: #171b2a;
 `;
 
 const Logo = styled.a``;
@@ -21,10 +23,12 @@ const Tabs = styled.div`
   display: flex;
 `;
 
-const Tab = styled.a`
-  color: #fff;
-  margin-left: 36px;
+const PrimaryTab = styled(PrimaryButton)`
+  margin-right: 18px;
+  border-radius: 18px;
 `;
+
+const Tab = styled(Button)``;
 
 export default function Topbar() {
   return (
@@ -33,10 +37,10 @@ export default function Topbar() {
         <img src="/static/top_logo.png" alt="logo" />
       </Logo>
       <Tabs>
-        <Tab href="/application">我要申請</Tab>
-        <Tab>搜尋資料</Tab>
-        <Tab>機關列表</Tab>
-        <Tab>常見問答</Tab>
+        <PrimaryTab href="/application">我要申請</PrimaryTab>
+        <Tab href="/searcher">搜尋資料</Tab>
+        <Tab href="/agencies">機關列表</Tab>
+        <Tab href="/fnq">常見問答</Tab>
       </Tabs>
     </Wrapper>
   );
