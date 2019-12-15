@@ -1,13 +1,18 @@
 import React from "react";
 import styled from "styled-components";
+import Artboard from "./Artboard";
 
-const Wrapper = styled.div`
+const Background = styled.div`
   background-image: url(/static/footer.png);
   background-position: center center;
   background-size: cover;
   height: 278px;
   display: flex;
   align-items: center;
+`;
+
+const Wrapper = styled(Artboard)`
+  display: flex;
 `;
 
 const SideBox = styled.div`
@@ -58,35 +63,37 @@ const Copyright = styled(Text)`
 
 export default function Footer() {
   return (
-    <Wrapper>
-      <SideBox>
-        <img src="/static/footer_logo.png" alt="logo" />
-      </SideBox>
-      <ContentBox>
-        <Links>
-          <Link href="/about">關於我們</Link>
-          <Link href="/fnq">常見問答</Link>
-          <Link href="/subscription">主題訂閱</Link>
-          <Link href="/contact">聯絡我們</Link>
-          <Link href="/facebook">臉書專頁</Link>
-        </Links>
-        <TextBox>
-          <Text>dataopenertw@gmail.com</Text>
-          <Text>
-            <span>
-              本網站文字、設計物及程式碼分別以 CC BY、CC BY、MIT 授權釋出。
-            </span>
-            <br />
-            <span>
-              若有任何錯誤或侵權之內容，敬請回報告知，我們將儘速改正。
-            </span>
-          </Text>
-          <Copyright>GovDataOpener@2019</Copyright>
-        </TextBox>
-      </ContentBox>
-      <SideBox>
-        <img src="/static/powered_by.png" alt="logo" />
-      </SideBox>
-    </Wrapper>
+    <Background>
+      <Wrapper>
+        <SideBox>
+          <img src="/static/footer_logo.png" alt="logo" />
+        </SideBox>
+        <ContentBox>
+          <Links>
+            <Link href="/about">關於我們</Link>
+            <Link href="/fnq">常見問答</Link>
+            <Link href="/subscription">主題訂閱</Link>
+            <Link href="/contact">聯絡我們</Link>
+            <Link href="/facebook">臉書專頁</Link>
+          </Links>
+          <TextBox>
+            <Text>dataopenertw@gmail.com</Text>
+            <Text>
+              <span>
+                本網站文字、設計物及程式碼分別以 CC BY、CC BY、MIT 授權釋出。
+              </span>
+              <br />
+              <span>
+                若有任何錯誤或侵權之內容，敬請回報告知，我們將儘速改正。
+              </span>
+            </Text>
+            <Copyright>GovDataOpener@2019</Copyright>
+          </TextBox>
+        </ContentBox>
+        <SideBox>
+          <img src="/static/powered_by.png" alt="logo" />
+        </SideBox>
+      </Wrapper>
+    </Background>
   );
 }

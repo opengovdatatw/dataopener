@@ -5,4 +5,5 @@ export default styled.a`
   color: #ffffff;
   letter-spacing: 0;
   text-decoration: none;
+  cursor: pointer;
 `;

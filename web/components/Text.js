@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export default styled.div`
-  margin: 0 auto;
-  width: 100%;
-  max-width: 800px;
+  font-size: 16px;
+  color: #283051;
+  letter-spacing: 0;
 `;

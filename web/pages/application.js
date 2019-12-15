@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "../components/Button";
+import PrimaryButton from "../components/PrimaryButton";
 
 const Card = styled.div`
   display: flex;
@@ -9,8 +9,10 @@ const Card = styled.div`
   background: #ffffff;
   border: 2px solid #cedae9;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  margin: 40px 0;
+  margin: 40px auto;
   padding: 20px;
+  width: 100%;
+  max-width: 800px;
 `;
 
 const Flow = styled.div`
@@ -55,6 +57,13 @@ const Step = styled.div`
   color: #283051;
 `;
 
+const Button = styled(PrimaryButton)`
+  margin: 20px auto;
+  display: block;
+  width: 140px;
+  text-align: center;
+`;
+
 export default function Index() {
   return (
     <>
@@ -76,7 +85,7 @@ export default function Index() {
         </Steps>
         <Tip>可由資料小幫手完成的項目</Tip>
       </Card>
-      <Button color="#0070ce">出發吧！</Button>
+      <Button>出發吧！</Button>
     </>
   );
 }
