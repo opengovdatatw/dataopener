@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import Title from "./Title";
+import { Title } from "./Text";
 import Container from "./Container";
 
 const Warpper = styled.div`

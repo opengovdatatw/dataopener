@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Question from "../components/Question";
-import Title from "../components/Title";
+import { Title } from "../components/Text";
 
 const Body = styled.div`
   display: flex;
