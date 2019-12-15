@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import PrimaryButton from "../components/PrimaryButton";
+import { PrimaryButton } from "../components/Link";
 
 const Card = styled.div`
   display: flex;

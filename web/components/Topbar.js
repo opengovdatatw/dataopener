@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Artboard from "./Artboard";
-import PrimaryButton from "./PrimaryButton";
-import Button from "./Button";
+import { Button, PrimaryButton } from "./Link";
 
 const Background = styled.div`
   height: 100px;

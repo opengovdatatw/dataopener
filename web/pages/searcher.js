@@ -7,7 +7,7 @@ import Tag from "../components/Tag";
 import SearchBar from "../components/SearchBar";
 import Dropdown from "../components/Dropdown";
 import PageHeader from "../components/PageHeader";
-import PrimaryButton from "../components/PrimaryButton";
+import SecondaryButton from "../components/Link/SecondaryButton";
 import Card from "../components/Card";
 import Table from "../components/Table";
 import Tabs, { Tab as ComponentTab } from "../components/Tabs";
@@ -36,7 +36,7 @@ const Legend = styled(ComponentLegend)`
   margin: 20px 0;
 `;
 
-export default function Index() {
+export default function Search() {
   const [type] = useState("dataopen");
 
   return (
@@ -87,7 +87,7 @@ export default function Index() {
               </td>
             </tr>
           </Table>
-          <PrimaryButton>詳細資料</PrimaryButton>
+          <SecondaryButton>詳細資料</SecondaryButton>
         </Card>
         <Card>
           <CardHeader>
@@ -115,7 +115,7 @@ export default function Index() {
               </td>
             </tr>
           </Table>
-          <PrimaryButton>詳細資料</PrimaryButton>
+          <SecondaryButton>詳細資料</SecondaryButton>
         </Card>
         <Card>
           <CardHeader>
@@ -143,7 +143,7 @@ export default function Index() {
               </td>
             </tr>
           </Table>
-          <PrimaryButton>詳細資料</PrimaryButton>
+          <SecondaryButton>詳細資料</SecondaryButton>
         </Card>
         <Card>
           <CardHeader>
@@ -171,7 +171,7 @@ export default function Index() {
               </td>
             </tr>
           </Table>
-          <PrimaryButton>詳細資料</PrimaryButton>
+          <SecondaryButton>詳細資料</SecondaryButton>
         </Card>
         <Pages>
           <Page>最前頁</Page>

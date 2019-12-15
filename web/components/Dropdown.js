@@ -14,10 +14,11 @@ const IconBox = styled.div`
   right: 0px;
   top: 0px;
   height: 100%;
-  padding-top: 4px;
+  padding-top: 1px;
   display: flex;
   justify-content: center;
   align-items: center;
+  pointer-events: none;
 `;
 
 const Icon = styled.div`
@@ -25,12 +26,17 @@ const Icon = styled.div`
   height: 12px;
   background-size: cover;
   background-image: url("/static/caret-down.png");
+  pointer-events: none;
 `;
 
 const Select = styled.select`
   font-size: 16px;
   color: #283051;
   letter-spacing: 0;
+  border: none;
+  outline-style: none;
+  appearance: none;
+  padding-right: 18px;
 `;
 
 export default function Dropdown({ value, onChange, children }) {
