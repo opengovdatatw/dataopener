@@ -74,7 +74,12 @@ export default function Footer() {
             <Link href="/fnq">常見問答</Link>
             <Link href="/subscription">主題訂閱</Link>
             <Link href="/contact">聯絡我們</Link>
-            <Link href="/facebook">臉書專頁</Link>
+            <Link
+              href="https://www.facebook.com/2125769830846436/"
+              target="facebook"
+            >
+              臉書專頁
+            </Link>
           </Links>
           <TextBox>
             <Text>dataopenertw@gmail.com</Text>
