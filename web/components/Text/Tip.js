@@ -3,5 +3,5 @@ import Text from "./Text";
 
 export default styled(Text)`
   font-size: 15px;
-  color: #525973;
+  color: #969696;
 `;

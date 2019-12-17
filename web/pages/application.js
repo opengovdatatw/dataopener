@@ -85,7 +85,7 @@ export default function Index() {
         </Steps>
         <Tip>可由資料小幫手完成的項目</Tip>
       </Card>
-      <Button>出發吧！</Button>
+      <Button href="/requisition">出發吧！</Button>
     </>
   );
 }

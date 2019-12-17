@@ -135,8 +135,8 @@ table {
 body {
   color: #000;
   font-size: 16px;
-  font-family: PingFangTC-Medium, "Noto Sans TC", "Microsoft JhengHei", "微軟正黑體", -apple-system,
-    "Avenir Next", PingFangTC-Light, HelveticaNeue-Light, "Helvetica Neue Light",
+  font-family: PingFangTC-Regular, "Noto Sans TC", "Microsoft JhengHei", "微軟正黑體", -apple-system,
+    "Avenir Next", HelveticaNeue-Light, "Helvetica Neue Light",
     "Helvetica Neue", Helvetica, "Heiti TC", "LiHei Pro", Arial, sans-serif;
   background-color: #070a0f;
 }

@@ -1,6 +1,8 @@
+import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
-export default styled.div`
+const TableContainer = styled.table`
   width: 100%;
   font-family: PingFangTC-Regular;
   font-size: 16px;
@@ -25,3 +27,19 @@ export default styled.div`
     width: 150px;
   }
 `;
+
+export default function Table({ children }) {
+  return (
+    <TableContainer>
+      <tbody>{children}</tbody>
+    </TableContainer>
+  );
+}
+
+Table.propTypes = {
+  children: PropTypes.node,
+};
+
+Table.defaultProps = {
+  children: undefined,
+};

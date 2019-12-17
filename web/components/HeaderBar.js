@@ -11,9 +11,9 @@ const Warpper = styled.div`
   padding-bottom: 22px;
 `;
 
-export default function HeaderBar({ title, children }) {
+export default function HeaderBar({ className, title, children }) {
   return (
-    <Warpper>
+    <Warpper className={className}>
       <Container>
         {title && <Title>{title}</Title>}
         {children}
@@ -25,9 +25,11 @@ export default function HeaderBar({ title, children }) {
 HeaderBar.propTypes = {
   title: PropTypes.string,
   children: PropTypes.node,
+  className: PropTypes.string,
 };
 
 HeaderBar.defaultProps = {
   title: undefined,
   children: PropTypes.node,
+  className: undefined,
 };
