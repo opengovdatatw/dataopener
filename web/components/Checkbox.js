@@ -41,21 +41,23 @@ export const Checkboxs = styled.div`
 
 export default function Checkbox(props) {
   const [field] = useField({ ...props, type: "checkbox" });
-  const { name, value } = props;
+  const { label, name, value } = props;
   return (
     <Label htmlFor={`${name}-${value}`} checked={field.checked}>
       <input id={`${name}-${value}`} type="checkbox" {...field} />
-      {value}
+      {label || value}
     </Label>
   );
 }
 
 Checkbox.propTypes = {
+  label: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 Checkbox.defaultProps = {
+  label: "",
   name: "",
   value: null,
 };

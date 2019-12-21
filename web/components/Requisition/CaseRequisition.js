@@ -25,11 +25,11 @@ export default function CaseRequisition({ onSubmit, onBack }) {
           （你申請的資料若沒有國內外已有開放的案例，請在欄位填「無」）
         </Alert>
         <Label>類似開放案例國家或國內機關</Label>
-        <Input name="case-agency" placeholder="國內機關或其他國家名稱" />
+        <Input name="caseAgency" placeholder="國內機關或其他國家名稱" />
         <Label>資料集名稱</Label>
-        <Input name="case-name" placeholder="資料集名稱" />
+        <Input name="caseName" placeholder="資料集名稱" />
         <Label>網址連結（網址太長者，請提供縮網址）</Label>
-        <Input name="case-url" placeholder="國內機關或其他國家名稱" />
+        <Input name="caseUrl" placeholder="國內機關或其他國家名稱" />
       </Card>
       <ButtonBar onSubmit={onSubmit} onBack={onBack} />
     </>

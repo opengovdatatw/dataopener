@@ -4,7 +4,7 @@ import React from "react";
 import { useField } from "formik";
 import styled from "styled-components";
 
-const NativeInput = styled.input`
+const NativeTextarea = styled.textarea`
   background: #fff;
   border: 2px solid #cedae9;
   font-family: PingFangTC-Regular;
@@ -16,7 +16,7 @@ const NativeInput = styled.input`
   padding: 14px;
 `;
 
-export default function Input(props) {
+export default function Textarea(props) {
   const [field] = useField(props);
-  return <NativeInput {...props} {...field} />;
+  return <NativeTextarea {...props} {...field} />;
 }

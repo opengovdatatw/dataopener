@@ -36,26 +36,67 @@ export default function ValueRequisition({ onSubmit, onBack }) {
         </Alert>
         <Text>a.【公共利益價值類】應優先開放</Text>
         <Checkboxs>
-          <Checkbox name="values" value="民生安全，如食品、警政" />
-          <Checkbox name="values" value="就醫用藥，如醫療、藥物" />
-          <Checkbox name="values" value="財政透明，如預決算" />
-          <Checkbox name="values" value="社會福利，如保險、就業" />
-          <Checkbox name="values" value="統計資料，如全國統計、學術統計" />
+          <Checkbox
+            name="valuePublics"
+            label="民生安全，如食品、警政"
+            value="民生安全"
+          />
+          <Checkbox
+            name="valuePublics"
+            label="就醫用藥，如醫療、藥物"
+            value="就醫用藥"
+          />
+          <Checkbox
+            name="valuePublics"
+            label="財政透明，如預決算"
+            value="財政透明"
+          />
+          <Checkbox
+            name="valuePublics"
+            label="社會福利，如保險、就業"
+            value="社會福利"
+          />
+          <Checkbox
+            name="valuePublics"
+            label="統計資料，如全國統計、學術統計"
+            value="統計資料"
+          />
         </Checkboxs>
         <Text>b.【濟發展價值類】應優先開放</Text>
         <Checkboxs>
-          <Checkbox name="values" value="基礎建設，如交通、網路" />
-          <Checkbox name="values" value="能源效率，如能源" />
-          <Checkbox name="values" value="地理空間，如地圖圖資" />
           <Checkbox
-            name="values"
-            value="環境氣候，如氣象、空氣品質、農林漁牧"
+            name="valueEconomics"
+            label="基礎建設，如交通、網路"
+            value="基礎建設"
+          />
+          <Checkbox
+            name="valueEconomics"
+            label="能源效率，如能源"
+            value="能源效率"
+          />
+          <Checkbox
+            name="valueEconomics"
+            label="地理空間，如地圖圖資"
+            value="地理空間"
+          />
+          <Checkbox
+            name="valueEconomics"
+            label="環境氣候，如氣象、空氣品質、農林漁牧"
+            value="環境氣候"
           />
         </Checkboxs>
         <Text>c.【政府透明價值類】應優先開放</Text>
         <Checkboxs>
-          <Checkbox name="values" value="民主課責，如選舉、法規" />
-          <Checkbox name="values" value="研究發展，如政府研究資料" />
+          <Checkbox
+            name="valueTransparencys"
+            label="民主課責，如選舉、法規"
+            value="民主課責"
+          />
+          <Checkbox
+            name="valueTransparencys"
+            label="研究發展，如政府研究資料"
+            value="研究發展"
+          />
         </Checkboxs>
       </Card>
       <ButtonBar onSubmit={onSubmit} onBack={onBack} />

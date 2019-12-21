@@ -24,14 +24,9 @@ export default function DataRequisition({ onSubmit, onBack }) {
           <Required />
           <Tip>為必填欄位</Tip>
         </Paragraph>
-        <Label isRequired>2-1-1. 請輸入本次申請的主旨</Label>
-        <Input
-          name="title"
-          placeholder="例：請開放全國歷年交通事故地點的原始資料"
-        />
-        <Label isRequired>2-1-2 請輸入希望開放的資料集名稱</Label>
+        <Label isRequired>2-1-1 請輸入希望開放的資料集名稱</Label>
         <Input name="dataset" placeholder="例：全國歷年交通事故地點" />
-        <Label isRequired>2-1-3 請輸入希望開放的資料欄位名稱</Label>
+        <Label isRequired>2-1-2 請輸入希望開放的資料欄位名稱</Label>
         <Input
           name="fields"
           placeholder="例：交通事故日期、時間、肇事路段、死亡人數、受傷人數、車種、肇事因素"
