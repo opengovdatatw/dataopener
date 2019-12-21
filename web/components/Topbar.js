@@ -29,11 +29,14 @@ const Tabs = styled.div`
 `;
 
 const PrimaryTab = styled(PrimaryButton)`
+  padding: 10px 18px 8px 18px;
   margin-right: 18px;
   border-radius: 18px;
 `;
 
-const Tab = styled(Button)``;
+const Tab = styled(Button)`
+  padding: 10px 18px 8px 18px;
+`;
 
 export default function Topbar() {
   return (
