@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ .Chart.Name }}
-  name: "{{ .Release.Name }}-port"
+    app: dataopener
+  name: "dataopener-production-port"
 spec:
   externalTrafficPolicy: Cluster
   ports:
@@ -11,7 +11,7 @@ spec:
       protocol: TCP
       targetPort: http
   selector:
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: dataopener-production
+    app.kubernetes.io/name: dataopener
   sessionAffinity: None
   type: NodePort
