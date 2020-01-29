@@ -42,6 +42,8 @@ const Legend = styled(ComponentLegend)`
 export default function Search() {
   const [type] = useState("requests");
   const [fuse, setFuse] = useState();
+  const [agencies, setAgencies] = useState([]);
+  const [replies, setReplies] = useState([]);
   const [results, setResults] = useState([]);
 
   useEffect(() => {
@@ -58,13 +60,19 @@ export default function Search() {
       };
 
       setFuse(new Fuse(data, options));
+      setAgencies(_.uniq(_.map(data, "agency")));
+      setReplies(_.uniq(_.map(data, "reply")));
     })();
-  }, [setFuse]);
+  }, [setFuse, setAgencies, setReplies]);
 
   const onKeywordChange = useCallback(
     evt => {
       const { value } = evt.target;
-      setResults(value.length > 1 ? _.chunk(fuse.search(value), 100)[0] : []);
+      if (value.length < 2 || !fuse) {
+        setResults([]);
+        return;
+      }
+      setResults(fuse.search(value));
     },
     [setResults, fuse],
   );
@@ -77,9 +85,15 @@ export default function Search() {
         <Toolbar>
           <Dropdown>
             <option>主管機關</option>
+            {_.map(agencies, agency => (
+              <option key={agency}>{agency}</option>
+            ))}
           </Dropdown>
           <Dropdown>
             <option>開放狀態</option>
+            {_.map(replies, reply => (
+              <option key={reply}>{reply}</option>
+            ))}
           </Dropdown>
         </Toolbar>
       </HeaderBar>
@@ -89,9 +103,9 @@ export default function Search() {
             <Tab active={type === "requests"}>我想要更多 </Tab>
             <Tab active={type === "datasets"}>政府資料開放平台</Tab>
           </Tabs>
-          <Tip>搜尋結果：102筆</Tip>
+          <Tip>{`搜尋結果：${results.length}`}</Tip>
         </PageHeader>
-        {_.map(results, result => (
+        {_.map(_.chunk(results, 10)[0], result => (
           <Card key={result.id}>
             <CardHeader>
               <Tag>{result.category}</Tag>
@@ -108,7 +122,9 @@ export default function Search() {
                 <td>{result.reply}</td>
               </tr>
             </Table>
-            <SecondaryButton>資料來源</SecondaryButton>
+            <SecondaryButton target="datasource" href={result.source}>
+              資料來源
+            </SecondaryButton>
           </Card>
         ))}
         <Pages>
