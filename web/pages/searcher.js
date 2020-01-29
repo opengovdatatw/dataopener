@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import _ from "lodash";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
+import axios from "axios";
+import Fuse from "fuse.js";
 import Container from "../components/Container";
 import HeaderBar from "../components/HeaderBar";
 import Text, { Tip, Legend as ComponentLegend } from "../components/Text";
@@ -37,13 +40,40 @@ const Legend = styled(ComponentLegend)`
 `;
 
 export default function Search() {
-  const [type] = useState("dataopen");
+  const [type] = useState("request");
+  const [fuse, setFuse] = useState();
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await axios("/data/rows");
+      const options = {
+        keys: [
+          { name: "subject", weight: 0.8 },
+          { name: "category", weight: 0.2 },
+          { name: "agency", weight: 0.2 },
+        ],
+        shouldSort: true,
+        minMatchCharLength: 2,
+      };
+
+      setFuse(new Fuse(response.data.data, options));
+    })();
+  }, [setFuse]);
+
+  const onKeywordChange = useCallback(
+    evt => {
+      const { value } = evt.target;
+      setResults(value.length > 1 ? _.chunk(fuse.search(value), 100)[0] : []);
+    },
+    [setResults, fuse],
+  );
 
   return (
     <>
       <HeaderBar title="搜尋資料">
         <Slogan>你想要的資料開放了嗎？若不確定，可以先搜尋一下。</Slogan>
-        <SearchBar placeholder="輸入關鍵字搜尋" />
+        <SearchBar placeholder="輸入關鍵字搜尋" onChange={onKeywordChange} />
         <Toolbar>
           <Dropdown>
             <option>主管機關</option>
@@ -56,123 +86,31 @@ export default function Search() {
       <Container>
         <PageHeader>
           <Tabs>
-            <Tab active={type === "dataopen"}>政府資料開放平台</Tab>
             <Tab active={type === "request"}>我想要更多 </Tab>
+            <Tab active={type === "dataopen"}>政府資料開放平台</Tab>
           </Tabs>
           <Tip>搜尋結果：102筆</Tip>
         </PageHeader>
-        <Card>
-          <CardHeader>
-            <Tag>森林</Tag>
-            <Tip>發布時間 2018 / 02 / 02</Tip>
-          </CardHeader>
-          <Legend>歷史森林火災點位歷史森林火災點位</Legend>
-          <Table>
-            <tr>
-              <th>提供機關</th>
-              <td>臺中市政府衛生局‧企劃資訊科</td>
-            </tr>
-            <tr>
-              <th>資料集描述</th>
-              <td>
-                107年盛裝飲用水抽驗結果(名稱有可能會很長，固定污染源經緯度
-                (名稱有可...
-              </td>
-            </tr>
-            <tr>
-              <th>欄位說明</th>
-              <td>
-                序號、樣品名稱、抽驗廠商名稱、廠商地址、檢驗項目1、檢驗項目2、檢驗結果
-                ...
-              </td>
-            </tr>
-          </Table>
-          <SecondaryButton>詳細資料</SecondaryButton>
-        </Card>
-        <Card>
-          <CardHeader>
-            <Tag>森林</Tag>
-            <Tip>發布時間 2018 / 02 / 02</Tip>
-          </CardHeader>
-          <Legend>歷史森林火災點位歷史森林火災點位</Legend>
-          <Table>
-            <tr>
-              <th>提供機關</th>
-              <td>臺中市政府衛生局‧企劃資訊科</td>
-            </tr>
-            <tr>
-              <th>資料集描述</th>
-              <td>
-                107年盛裝飲用水抽驗結果(名稱有可能會很長，固定污染源經緯度
-                (名稱有可...
-              </td>
-            </tr>
-            <tr>
-              <th>欄位說明</th>
-              <td>
-                序號、樣品名稱、抽驗廠商名稱、廠商地址、檢驗項目1、檢驗項目2、檢驗結果
-                ...
-              </td>
-            </tr>
-          </Table>
-          <SecondaryButton>詳細資料</SecondaryButton>
-        </Card>
-        <Card>
-          <CardHeader>
-            <Tag>森林</Tag>
-            <Tip>發布時間 2018 / 02 / 02</Tip>
-          </CardHeader>
-          <Legend>歷史森林火災點位歷史森林火災點位</Legend>
-          <Table>
-            <tr>
-              <th>提供機關</th>
-              <td>臺中市政府衛生局‧企劃資訊科</td>
-            </tr>
-            <tr>
-              <th>資料集描述</th>
-              <td>
-                107年盛裝飲用水抽驗結果(名稱有可能會很長，固定污染源經緯度
-                (名稱有可...
-              </td>
-            </tr>
-            <tr>
-              <th>欄位說明</th>
-              <td>
-                序號、樣品名稱、抽驗廠商名稱、廠商地址、檢驗項目1、檢驗項目2、檢驗結果
-                ...
-              </td>
-            </tr>
-          </Table>
-          <SecondaryButton>詳細資料</SecondaryButton>
-        </Card>
-        <Card>
-          <CardHeader>
-            <Tag>森林</Tag>
-            <Tip>發布時間 2018 / 02 / 02</Tip>
-          </CardHeader>
-          <Legend>歷史森林火災點位歷史森林火災點位</Legend>
-          <Table>
-            <tr>
-              <th>提供機關</th>
-              <td>臺中市政府衛生局‧企劃資訊科</td>
-            </tr>
-            <tr>
-              <th>資料集描述</th>
-              <td>
-                107年盛裝飲用水抽驗結果(名稱有可能會很長，固定污染源經緯度
-                (名稱有可...
-              </td>
-            </tr>
-            <tr>
-              <th>欄位說明</th>
-              <td>
-                序號、樣品名稱、抽驗廠商名稱、廠商地址、檢驗項目1、檢驗項目2、檢驗結果
-                ...
-              </td>
-            </tr>
-          </Table>
-          <SecondaryButton>詳細資料</SecondaryButton>
-        </Card>
+        {_.map(results, result => (
+          <Card key={result.id}>
+            <CardHeader>
+              <Tag>{result.category}</Tag>
+              <Tip>發布時間 ----</Tip>
+            </CardHeader>
+            <Legend>{result.subject}</Legend>
+            <Table>
+              <tr>
+                <th>派發機關</th>
+                <td>{result.agency}</td>
+              </tr>
+              <tr>
+                <th>回應</th>
+                <td>{result.reply}</td>
+              </tr>
+            </Table>
+            <SecondaryButton>資料來源</SecondaryButton>
+          </Card>
+        ))}
         <Pages>
           <Page>最前頁</Page>
           <Page>1</Page>

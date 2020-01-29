@@ -12,6 +12,7 @@ const TableContainer = styled.table`
   border: none;
   border-collapse: collapse;
   margin: 20px 0;
+  margin-bottom: 40px;
 
   & th {
     font-family: PingFangTC-Semibold;
