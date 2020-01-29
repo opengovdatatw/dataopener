@@ -1,7 +1,6 @@
 import _ from "lodash";
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import Fuse from "fuse.js";
 import Container from "../components/Container";
 import HeaderBar from "../components/HeaderBar";
@@ -15,6 +14,7 @@ import Card from "../components/Card";
 import Table from "../components/Table";
 import Tabs, { Tab as ComponentTab } from "../components/Tabs";
 import Pages, { Page } from "../components/Pages";
+import fetch from "../helps/fetch";
 
 const Slogan = styled(Text)`
   text-align: center;
@@ -40,13 +40,13 @@ const Legend = styled(ComponentLegend)`
 `;
 
 export default function Search() {
-  const [type] = useState("request");
+  const [type] = useState("requests");
   const [fuse, setFuse] = useState();
   const [results, setResults] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const response = await axios("/data/rows");
+      const data = await fetch("/api/requests");
       const options = {
         keys: [
           { name: "subject", weight: 0.8 },
@@ -57,7 +57,7 @@ export default function Search() {
         minMatchCharLength: 2,
       };
 
-      setFuse(new Fuse(response.data.data, options));
+      setFuse(new Fuse(data, options));
     })();
   }, [setFuse]);
 
@@ -86,8 +86,8 @@ export default function Search() {
       <Container>
         <PageHeader>
           <Tabs>
-            <Tab active={type === "request"}>我想要更多 </Tab>
-            <Tab active={type === "dataopen"}>政府資料開放平台</Tab>
+            <Tab active={type === "requests"}>我想要更多 </Tab>
+            <Tab active={type === "datasets"}>政府資料開放平台</Tab>
           </Tabs>
           <Tip>搜尋結果：102筆</Tip>
         </PageHeader>

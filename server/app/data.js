@@ -43,16 +43,16 @@ async function fetch() {
 }
 
 export default ({ app }) => {
-  app.get("/data/rows", cors(), async (req, res) => {
+  app.get("/api/requests", cors(), async (req, res) => {
     res.json({ data: await fetch() });
   });
 
-  app.get("/data/results", cors(), async (req, res) => {
+  app.get("/api/requests/count-by-:field", cors(), async (req, res) => {
     const rows = await fetch();
-    res.json({ data: _.countBy(rows, "reply") });
+    res.json({ data: _.countBy(rows, req.params.field) });
   });
 
-  app.get("/data/results/:agency", cors(), async (req, res) => {
+  app.get("/api/requests/group-by-agency/:agency", cors(), async (req, res) => {
     const rows = _.filter(await fetch(), ["agency", req.params.agency]);
     res.json({ data: _.countBy(rows, "reply") });
   });
