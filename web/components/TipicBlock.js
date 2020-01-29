@@ -1,6 +1,8 @@
-import React from "react";
+import _ from "lodash";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SubTitle from "./SubTitle";
+import fetch from "../helps/fetch";
 
 const Wrapper = styled.div`
   height: 676px;
@@ -16,6 +18,9 @@ const Content = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 `;
 
 const Tipics = styled.div`
@@ -51,25 +56,48 @@ const Timestamp = styled.div`
   padding: 0 80px;
 `;
 
+const TipicTitle = styled.div`
+  font-size: 24px;
+  text-align: center;
+  color: #fff;
+`;
+
+const TipicValue = styled.div`
+  font-size: 64px;
+  text-align: center;
+  padding: 20px 0;
+  color: #fff;
+`;
+
 export default function TipicBlock() {
+  const [tipics, setTipics] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const data = await fetch("/api/requests");
+      setTipics(
+        _.map(_.countBy(data, "category"), (value, tipic) => ({
+          tipic,
+          value,
+        })).sort((a, b) => b.value - a.value),
+      );
+    })();
+  }, []);
+
   return (
     <Wrapper>
       <SubTitle>年度熱門申請主題</SubTitle>
       <Tipics>
-        <Tipic>
-          <Content />
-        </Tipic>
-        <Tipic>
-          <Content />
-        </Tipic>
-        <Tipic>
-          <Content />
-        </Tipic>
-        <Tipic>
-          <Content />
-        </Tipic>
+        {_.map(_.take(tipics, 4), ({ tipic, value }) => (
+          <Tipic key={tipic}>
+            <Content>
+              <TipicTitle>{tipic}</TipicTitle>
+              <TipicValue>{value}</TipicValue>
+            </Content>
+          </Tipic>
+        ))}
       </Tipics>
-      <Timestamp>更新日期: 2020-01-01</Timestamp>
+      <Timestamp>更新日期: ----</Timestamp>
     </Wrapper>
   );
 }
