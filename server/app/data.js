@@ -22,7 +22,7 @@ const parseRow = rows => {
       subject: row[2],
       agency: row[3],
       source: row[4],
-      reply: row[6],
+      reply: _.replace(row[6], /^\w\. /, ""),
     });
   });
 
