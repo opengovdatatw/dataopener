@@ -1,4 +1,5 @@
 import _ from "lodash";
+import cors from "cors";
 import { google } from "googleapis";
 
 const sheets = google.sheets({
@@ -42,16 +43,16 @@ async function fetch() {
 }
 
 export default ({ app }) => {
-  app.get("/data/rows", async (req, res) => {
+  app.get("/data/rows", cors(), async (req, res) => {
     res.json({ data: await fetch() });
   });
 
-  app.get("/data/results", async (req, res) => {
+  app.get("/data/results", cors(), async (req, res) => {
     const rows = await fetch();
     res.json({ data: _.countBy(rows, "reply") });
   });
 
-  app.get("/data/results/:agency", async (req, res) => {
+  app.get("/data/results/:agency", cors(), async (req, res) => {
     const rows = _.filter(await fetch(), ["agency", req.params.agency]);
     res.json({ data: _.countBy(rows, "reply") });
   });
