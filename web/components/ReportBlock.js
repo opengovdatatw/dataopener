@@ -51,8 +51,6 @@ const ReportBar = ({ replies }) => {
       const annotationTransform = (x) => (d, i) => {
         return `translate(${x - (i === 0 ? 0 : 170)} 0)`;
       };
-      const rect = barChartRef.current.getBoundingClientRect();
-      console.log(rect);
       const transformation = d3.pie().startAngle(0.05).endAngle(0.95).value(d => d.value);
       const transformed = transformation(replies);
       const group = chart
@@ -133,9 +131,9 @@ export default function ReportBlock() {
 
   useEffect(() => {
     (async () => {
-      const raw = async () => ({ "data": { "已開放": 801, "未回覆": 311, "其他": 28, "不對外開放": 1405, "預計開放": 230, "要分案一不納入計算或製作單獨頁面": 7 } });
-      //      const data = await fetch("/api/requests/count-by-reply");
-      const data = await raw()
+      // const raw = async () => ({ "data": { "已開放": 801, "未回覆": 311, "其他": 28, "不對外開放": 1405, "預計開放": 230, "要分案一不納入計算或製作單獨頁面": 7 } });
+      // const data = await raw()
+      const data = await fetch("/api/requests/count-by-reply")
         .then(res => _.transform(res.data, (a, value, label) => { a.push({ label, value }); return a; }, []))
         .then(array => array.filter(n => n.label !== '要分案一不納入計算或製作單獨頁面' && n.label !== '其他').sort((a, b) => (b.value - a.value)));
       setReplies(data);
