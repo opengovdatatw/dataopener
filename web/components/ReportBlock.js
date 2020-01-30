@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import SubTitle from "./SubTitle";
 import * as d3 from 'd3';
+import fetch from "../helps/fetch";
 
 const D3_TEXT_COLOR = [
   "#0070ce",
@@ -131,10 +132,10 @@ export default function ReportBlock() {
 
   useEffect(() => {
     (async () => {
-      // const raw = async () => ({ "data": { "已開放": 801, "未回覆": 311, "其他": 28, "不對外開放": 1405, "預計開放": 230, "要分案一不納入計算或製作單獨頁面": 7 } });
+      // const raw = async () => ({ "已開放": 801, "未回覆": 311, "其他": 28, "不對外開放": 1405, "預計開放": 230, "要分案一不納入計算或製作單獨頁面": 7 } );
       // const data = await raw()
       const data = await fetch("/api/requests/count-by-reply")
-        .then(res => _.transform(res.data, (a, value, label) => { a.push({ label, value }); return a; }, []))
+        .then(res => _.transform(res, (a, value, label) => { a.push({ label, value }); return a; }, []))
         .then(array => array.filter(n => n.label !== '要分案一不納入計算或製作單獨頁面' && n.label !== '其他').sort((a, b) => (b.value - a.value)));
       setReplies(data);
     })();
