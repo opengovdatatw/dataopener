@@ -52,7 +52,7 @@ const Answer = styled.div`
   ${({ active }) => (active ? "display: block" : "display: none")}
 `;
 
-export default function Question({ title, answer }) {
+export default function QuestionItem({ title, answer }) {
   const [active, setActive] = useState(false);
   const html = useMemo(() => md.render((answer || "").replace(/  +/g, " ")), [
     answer,
@@ -72,12 +72,12 @@ export default function Question({ title, answer }) {
   );
 }
 
-Question.propTypes = {
+QuestionItem.propTypes = {
   title: PropTypes.string,
   answer: PropTypes.string,
 };
 
-Question.defaultProps = {
+QuestionItem.defaultProps = {
   title: "",
   answer: "",
 };
