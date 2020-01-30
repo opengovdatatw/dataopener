@@ -17,12 +17,13 @@ const parseRow = rows => {
     if (row[6] === "要分案一不納入計算或製作單獨頁面") console.log(row);
 
     results.push({
-      id: row[0],
-      category: row[1],
-      subject: row[2],
-      agency: row[3],
-      source: row[4],
-      reply: _.replace(row[6], /^\w\. /, ""),
+      id: row[1],
+      category: row[2],
+      subject: row[3],
+      agency: row[4],
+      source: row[5],
+      postedAt: row[0],
+      reply: _.replace(row[7], /^\w\. /, ""),
     });
   });
 
