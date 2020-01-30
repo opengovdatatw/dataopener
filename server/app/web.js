@@ -14,5 +14,10 @@ export default ({ app }) => {
   const handler = web.getRequestHandler();
 
   app.get("*", (req, res) => handler(req, res));
+
+  app.get("/agency/:name", (req, res) => {
+    return web.render(req, res, "/agency", { name: req.params.name });
+  });
+
   web.prepare();
 };

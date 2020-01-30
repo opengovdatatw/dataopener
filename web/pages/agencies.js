@@ -82,6 +82,7 @@ const Collection = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   margin: -8px;
+  padding-bottom: 40px;
 `;
 
 export default function Index() {
