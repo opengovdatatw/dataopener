@@ -92,7 +92,7 @@ export default function Footer() {
                 若有任何錯誤或侵權之內容，敬請回報告知，我們將儘速改正。
               </span>
             </Text>
-            <Copyright>GovDataOpener@2019</Copyright>
+            <Copyright>dataopenertw@2019</Copyright>
           </TextBox>
         </ContentBox>
         <SideBox>
