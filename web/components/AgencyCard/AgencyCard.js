@@ -1,12 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import Link from "next/link";
 import Text from "../Text";
 
 const Wrapper = styled.div`
   flex-grow: 1;
   width: 147px;
   margin: 8px;
+  cursor: pointer;
 `;
 
 const Box = styled.div`
@@ -35,12 +37,14 @@ const TextContainer = styled(Text)`
 
 export default function AgencyCard({ title, children }) {
   return (
-    <Wrapper>
-      <IconBox>{children}</IconBox>
-      <TextBox>
-        <TextContainer>{title}</TextContainer>
-      </TextBox>
-    </Wrapper>
+    <Link href={`/agencies?name=${title}`} as={`/agencies/${title}`}>
+      <Wrapper>
+        <IconBox>{children}</IconBox>
+        <TextBox>
+          <TextContainer>{title}</TextContainer>
+        </TextBox>
+      </Wrapper>
+    </Link>
   );
 }
 
