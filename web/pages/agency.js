@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { PieChart, Pie, Cell } from "recharts";
-import { Title } from "../components/Text";
+import { Title, Tip } from "../components/Text";
 import Container from "../components/Container";
 import fetch from "../helps/fetch";
 
@@ -16,6 +16,7 @@ const COLORS = {
 };
 
 const RADIAN = Math.PI / 180;
+
 const renderCustomizedLabel = item => {
   const { cx, cy, midAngle, innerRadius, outerRadius, percent } = item;
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -39,6 +40,54 @@ const TitleBox = styled.div`
   margin: 40px auto;
 `;
 
+const RejectReport = styled.div`
+  display: flex;
+`;
+
+const ChartBox = styled.div`
+  flex: 1;
+  & > div {
+    margin: 0 auto;
+  }
+`;
+
+const LegendBox = styled.div`
+  flex: 1;
+  max-width: 284px;
+  align-self: flex-end;
+`;
+
+const Legend = styled.div`
+  width: 100%;
+  display: table;
+  border-color: #283051;
+  border-width: 1px 0;
+  border-style: solid;
+  margin-bottom: 10px;
+`;
+
+const LegendItem = styled.div`
+  display: table-row;
+`;
+
+const LegendIcon = styled.div`
+  display: inline-block;
+  background: ${({ color }) => color};
+  width: 12px;
+  height: 12px;
+  margin-right: 10px;
+`;
+
+const LegendText = styled.div`
+  display: table-cell;
+  padding: 6px 0;
+`;
+
+const LegendValue = styled.div`
+  display: table-cell;
+  padding: 6px 0;
+`;
+
 export default function Agency() {
   const [replies, setReplies] = useState([]);
   const router = useRouter();
@@ -46,7 +95,7 @@ export default function Agency() {
 
   useEffect(() => {
     (async () => {
-      const data = await fetch("/api/requests");
+      const data = await fetch("https://dataopener.tw/api/requests");
       const results = _.filter(data, { agency: name });
 
       const temps = {
@@ -66,32 +115,78 @@ export default function Agency() {
         temps[reply] += 1;
       });
 
-      setReplies(_.map(temps, (v, n) => ({ name: n, value: v })));
+      setReplies(temps);
     })();
   }, [name, setReplies]);
-
-  console.log(replies);
 
   return (
     <Container>
       <TitleBox>
         <Title>{name}</Title>
-        <PieChart width={300} height={300}>
-          <Pie
-            data={replies}
-            cx={150}
-            cy={150}
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={140}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {replies.map(({ name: n }) => (
-              <Cell key={`cell-${n}`} fill={COLORS[n]} />
-            ))}
-          </Pie>
-        </PieChart>
+        <RejectReport>
+          <ChartBox>
+            <PieChart width={300} height={300}>
+              <Pie
+                data={_.map(replies, (v, n) => ({ name: n, value: v }))}
+                cx={145}
+                cy={145}
+                labelLine={false}
+                label={renderCustomizedLabel}
+                outerRadius={140}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {_.map(replies, (v, n) => (
+                  <Cell key={`cell-${n}`} fill={COLORS[n]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ChartBox>
+          <LegendBox>
+            <Legend>
+              <LegendItem>
+                <LegendText>准駁結果</LegendText>
+                <LegendValue>件數</LegendValue>
+              </LegendItem>
+              <LegendItem>
+                <LegendText>
+                  <LegendIcon color="#00B5E5" />
+                  <span>已開放</span>
+                </LegendText>
+                <LegendValue>{replies["已開放"]}</LegendValue>
+              </LegendItem>
+              <LegendItem>
+                <LegendText>
+                  <LegendIcon color="#31CD90" />
+                  <span>預計開放</span>
+                </LegendText>
+                <LegendValue>{replies["預計開放"]}</LegendValue>
+              </LegendItem>
+              <LegendItem>
+                <LegendText>
+                  <LegendIcon color="#F4C040" />
+                  <span>不對外開放</span>
+                </LegendText>
+                <LegendValue>{replies["不對外開放"]}</LegendValue>
+              </LegendItem>
+              <LegendItem>
+                <LegendText>
+                  <LegendIcon color="#283051" />
+                  <span>未回覆</span>
+                </LegendText>
+                <LegendValue>{replies["未回覆"]}</LegendValue>
+              </LegendItem>
+              <LegendItem>
+                <LegendText>
+                  <LegendIcon color="#CDCDCD" />
+                  <span>其他</span>
+                </LegendText>
+                <LegendValue>{replies["其他"]}</LegendValue>
+              </LegendItem>
+            </Legend>
+            <Tip>{`資料總比數：${_.sum(_.map(replies, v => v))}`}</Tip>
+          </LegendBox>
+        </RejectReport>
       </TitleBox>
     </Container>
   );
