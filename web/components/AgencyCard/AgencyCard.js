@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import Text from "../Text";
 
-const Wrapper = styled.div`
+const Wrapper = styled.a`
   flex-grow: 1;
   width: 147px;
   margin: 8px;
@@ -37,7 +37,7 @@ const TextContainer = styled(Text)`
 
 export default function AgencyCard({ title, children }) {
   return (
-    <Link href={`/agencies?name=${title}`} as={`/agencies/${title}`}>
+    <Link href={`/agency?name=${title}`} as={`/agencies/${title}`}>
       <Wrapper>
         <IconBox>{children}</IconBox>
         <TextBox>

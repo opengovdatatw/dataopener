@@ -14,7 +14,7 @@ export default ({ app }) => {
   const handler = web.getRequestHandler();
 
   app.get("/agencies/:name", (req, res) => {
-    return web.render(req, res, "/agencies", { name: req.params.name });
+    return web.render(req, res, "/agency", { name: req.params.name });
   });
 
   app.get("*", (req, res) => handler(req, res));
