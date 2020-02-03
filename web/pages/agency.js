@@ -90,12 +90,13 @@ const LegendValue = styled.div`
 
 export default function Agency() {
   const [replies, setReplies] = useState([]);
+  const [rejectReasons, setRejectReasons] = useState({});
   const router = useRouter();
   const { name } = router.query;
 
   useEffect(() => {
     (async () => {
-      const data = await fetch("https://dataopener.tw/api/requests");
+      const data = await fetch("/api/requests");
       const results = _.filter(data, { agency: name });
 
       const temps = {
@@ -106,16 +107,24 @@ export default function Agency() {
         其他: 0,
       };
 
-      _.forEach(results, ({ reply }) => {
+      const tempTags = {};
+
+      _.forEach(results, ({ reply, tags }) => {
         if (_.isUndefined(temps[reply])) {
           temps["其他"] += 1;
           return;
         }
 
         temps[reply] += 1;
+
+        if (reply==="不對外開放" && tags && tags.length) {
+          console.log(tags);
+           tags.forEach(t=>tempTags[t]=((tempTags[t] ||0)+1));
+        }
       });
 
       setReplies(temps);
+      setRejectReasons(tempTags);
     })();
   }, [name, setReplies]);
 
