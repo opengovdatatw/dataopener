@@ -24,6 +24,7 @@ const parseRow = rows => {
       source: row[5],
       postedAt: row[0],
       reply: _.replace(row[7], /^\w\. /, ""),
+      tags: row.slice(8).filter(s=>s.length)
     });
   });
 
