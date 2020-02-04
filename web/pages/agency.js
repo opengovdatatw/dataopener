@@ -42,7 +42,7 @@ const TitleBox = styled.div`
 
 const RejectReport = styled.div`
   display: flex;
-  margin: 40px auto;
+  margin: 20px auto;
 `;
 
 const ChartBox = styled.div`
@@ -87,6 +87,12 @@ const LegendText = styled.div`
 const LegendValue = styled.div`
   display: table-cell;
   padding: 6px 0;
+`;
+
+const BarChartTtile = styled.div`
+  margin-top: 40px;
+  font-size: 24px;
+  text-align: center
 `;
 
 export default function Agency() {
@@ -196,6 +202,7 @@ export default function Agency() {
             <Tip>{`資料總比數：${_.sum(_.map(replies, v => v))}`}</Tip>
           </LegendBox>
         </RejectReport>
+        <BarChartTtile>不對外開放原因</BarChartTtile>
         <RejectReport>
           <ChartBox>
             <BarChart width={600} height={300} layout="vertical" maxBarSize={25}
