@@ -93,7 +93,7 @@ export default function Agency() {
   const [replies, setReplies] = useState([]);
   const [rejectReasons, setRejectReasons] = useState([]);
   const router = useRouter();
-  const { name } = router.query;
+  const name = router.query.name || decodeURIComponent(router.asPath.split('/').pop());
 
   useEffect(() => {
     (async () => {
@@ -201,7 +201,7 @@ export default function Agency() {
             <BarChart width={600} height={300} layout="vertical" maxBarSize={25}
               data={rejectReasons}
             >
-              <XAxis type="number" allowDecimals={false} minTickGap={1} tickCount={Math.min(10, 2 + _.max(_.map(rejectReasons,o=>o.value)))} />
+              <XAxis type="number" allowDecimals={false} minTickGap={1} tickCount={Math.min(10, 2 + _.max(_.map(rejectReasons, o => o.value)))} />
               <YAxis type="category" dataKey="name" width={200} />
               <Bar dataKey="value" fill="#F4C040">
                 <LabelList dataKey="value" position="right" />
