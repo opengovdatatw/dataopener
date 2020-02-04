@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { PieChart, Pie, Cell } from "recharts";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, LabelList } from "recharts";
 import { Title, Tip } from "../components/Text";
 import Container from "../components/Container";
 import fetch from "../helps/fetch";
@@ -42,6 +42,7 @@ const TitleBox = styled.div`
 
 const RejectReport = styled.div`
   display: flex;
+  margin: 40px auto;
 `;
 
 const ChartBox = styled.div`
@@ -90,7 +91,7 @@ const LegendValue = styled.div`
 
 export default function Agency() {
   const [replies, setReplies] = useState([]);
-  const [rejectReasons, setRejectReasons] = useState({});
+  const [rejectReasons, setRejectReasons] = useState([]);
   const router = useRouter();
   const { name } = router.query;
 
@@ -117,14 +118,13 @@ export default function Agency() {
 
         temps[reply] += 1;
 
-        if (reply==="不對外開放" && tags && tags.length) {
-          console.log(tags);
-           tags.forEach(t=>tempTags[t]=((tempTags[t] ||0)+1));
+        if (reply === "不對外開放" && tags && tags.length) {
+          tags.forEach(t => tempTags[t] = ((tempTags[t] || 0) + 1));
         }
       });
 
       setReplies(temps);
-      setRejectReasons(tempTags);
+      setRejectReasons(_.sortBy(_.map(tempTags, (v, n) => ({ name: n, value: v })), o => -o.value));
     })();
   }, [name, setReplies]);
 
@@ -195,6 +195,19 @@ export default function Agency() {
             </Legend>
             <Tip>{`資料總比數：${_.sum(_.map(replies, v => v))}`}</Tip>
           </LegendBox>
+        </RejectReport>
+        <RejectReport>
+          <ChartBox>
+            <BarChart width={600} height={300} layout="vertical" maxBarSize={25}
+              data={rejectReasons}
+            >
+              <XAxis type="number" allowDecimals={false} minTickGap={1} tickCount={Math.min(10, 2 + _.max(_.map(rejectReasons,o=>o.value)))} />
+              <YAxis type="category" dataKey="name" width={200} />
+              <Bar dataKey="value" fill="#F4C040">
+                <LabelList dataKey="value" position="right" />
+              </Bar>
+            </BarChart>
+          </ChartBox>
         </RejectReport>
       </TitleBox>
     </Container>
