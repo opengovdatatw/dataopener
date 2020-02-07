@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { PieChart, Pie, Cell } from "recharts";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, LabelList } from "recharts";
 import { Title, Tip } from "../components/Text";
 import Container from "../components/Container";
 import fetch from "../helps/fetch";
@@ -42,6 +42,7 @@ const TitleBox = styled.div`
 
 const RejectReport = styled.div`
   display: flex;
+  margin: 20px auto;
 `;
 
 const ChartBox = styled.div`
@@ -88,14 +89,21 @@ const LegendValue = styled.div`
   padding: 6px 0;
 `;
 
+const BarChartTtile = styled.div`
+  margin-top: 40px;
+  font-size: 24px;
+  text-align: center
+`;
+
 export default function Agency() {
   const [replies, setReplies] = useState([]);
+  const [rejectReasons, setRejectReasons] = useState([]);
   const router = useRouter();
-  const { name } = router.query;
+  const name = router.query.name || decodeURIComponent(router.asPath.split('/').pop());
 
   useEffect(() => {
     (async () => {
-      const data = await fetch("https://dataopener.tw/api/requests");
+      const data = await fetch("/api/requests");
       const results = _.filter(data, { agency: name });
 
       const temps = {
@@ -106,16 +114,23 @@ export default function Agency() {
         其他: 0,
       };
 
-      _.forEach(results, ({ reply }) => {
+      const tempTags = {};
+
+      _.forEach(results, ({ reply, tags }) => {
         if (_.isUndefined(temps[reply])) {
           temps["其他"] += 1;
           return;
         }
 
         temps[reply] += 1;
+
+        if (reply === "不對外開放" && tags && tags.length) {
+          tags.forEach(t => tempTags[t] = ((tempTags[t] || 0) + 1));
+        }
       });
 
       setReplies(temps);
+      setRejectReasons(_.sortBy(_.map(tempTags, (v, n) => ({ name: n, value: v })), o => -o.value));
     })();
   }, [name, setReplies]);
 
@@ -186,6 +201,20 @@ export default function Agency() {
             </Legend>
             <Tip>{`資料總比數：${_.sum(_.map(replies, v => v))}`}</Tip>
           </LegendBox>
+        </RejectReport>
+        <BarChartTtile>不對外開放原因</BarChartTtile>
+        <RejectReport>
+          <ChartBox>
+            <BarChart width={600} height={300} layout="vertical" maxBarSize={25}
+              data={rejectReasons}
+            >
+              <XAxis type="number" allowDecimals={false} minTickGap={1} tickCount={Math.min(10, 2 + _.max(_.map(rejectReasons, o => o.value)))} />
+              <YAxis type="category" dataKey="name" width={200} />
+              <Bar dataKey="value" fill="#F4C040">
+                <LabelList dataKey="value" position="right" />
+              </Bar>
+            </BarChart>
+          </ChartBox>
         </RejectReport>
       </TitleBox>
     </Container>
