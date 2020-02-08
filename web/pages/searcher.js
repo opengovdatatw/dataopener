@@ -42,6 +42,7 @@ const Legend = styled(ComponentLegend)`
 export default function Search() {
   const [type] = useState("requests");
   const [fuse, setFuse] = useState();
+  const [page, setPage] = useState(1);
   const [agencies, setAgencies] = useState([]);
   const [replies, setReplies] = useState([]);
   const [results, setResults] = useState([]);
@@ -55,7 +56,7 @@ export default function Search() {
           { name: "category", weight: 0.2 },
           { name: "agency", weight: 0.2 },
         ],
-        Threshold: 0.1,
+        threshold: 0.2,
         shouldSort: true,
         minMatchCharLength: 2,
       };
@@ -73,10 +74,19 @@ export default function Search() {
         setResults([]);
         return;
       }
+      setPage(1);
       setResults(fuse.search(value));
     },
-    [setResults, fuse],
+    [setResults, setPage, fuse],
   );
+
+  const resultByPages = _.chunk(results, 10);
+
+  const startPage = page - 3 >= 1 ? page - 3 : 1;
+  const endPage =
+    startPage + 7 <= resultByPages.length
+      ? startPage + 7
+      : resultByPages.length;
 
   return (
     <>
@@ -106,7 +116,7 @@ export default function Search() {
           </Tabs>
           <Tip>{`搜尋結果：${results.length}`}</Tip>
         </PageHeader>
-        {_.map(_.chunk(results, 10)[0], result => (
+        {_.map(resultByPages[page - 1], result => (
           <Card key={result.id}>
             <CardHeader>
               <Tag>{result.category}</Tag>
@@ -129,11 +139,13 @@ export default function Search() {
           </Card>
         ))}
         <Pages>
-          <Page>最前頁</Page>
-          <Page>1</Page>
-          <Page>2</Page>
-          <Page>3</Page>
-          <Page>最末頁</Page>
+          <Page onClick={() => setPage(1)}>最前頁</Page>
+          {_.map(_.range(startPage, endPage + 1), value => (
+            <Page key={`page${value}`} onClick={() => setPage(value)}>
+              {value}
+            </Page>
+          ))}
+          <Page onClick={() => setPage(resultByPages.length)}>最末頁</Page>
         </Pages>
       </Container>
     </>

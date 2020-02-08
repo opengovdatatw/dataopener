@@ -55,7 +55,10 @@ export default function Dropdown({ value, onChange, children }) {
 Dropdown.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
-  children: PropTypes.arrayOf(PropTypes.element),
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.arrayOf(PropTypes.element),
+  ]),
 };
 
 Dropdown.defaultProps = {
