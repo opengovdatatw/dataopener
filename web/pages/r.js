@@ -10,7 +10,8 @@ import NavigationBar from "../components/Requisition/NavigationBar";
 
 const ButtonBar = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 60px;
 `;
 
@@ -26,8 +27,18 @@ const Textarea = styled.textarea`
   padding: 14px;
 `;
 
+const TipText = styled.div`
+  visibility: ${({ visible }) => (visible ? "visible" : "hidden")};
+  opacity: ${({ visible }) => (visible ? 0 : 1)};
+  transition: opacity 1s linear 2s;
+  color: #25b632;
+  font-size: 12px;
+  margin-bottom: 8px;
+`;
+
 export default function R() {
   const [result, setResult] = useState("");
+  const [readyForSubmit, setReadyForSubmit] = useState(false);
 
   useEffect(() => {
     const { search: querystring } = window.location;
@@ -97,7 +108,14 @@ export default function R() {
     }
   });
 
-  const onCopyClick = useCallback(() => copy(result), [result]);
+  const onCopyClick = useCallback(() => {
+    copy(result);
+    setReadyForSubmit(true);
+  }, [result]);
+
+  const onSubmitClick = useCallback(() => {
+    window.open("https://data.gov.tw/add/suggest", "suggest");
+  }, []);
 
   if (!result) return <div />;
 
@@ -109,8 +127,9 @@ export default function R() {
         <Textarea rows="10">{result}</Textarea>
       </Card>
       <ButtonBar>
-        <PrimaryButton onClick={onCopyClick}>
-          複製表單內容，並前往資料申請！
+        <TipText visible={readyForSubmit}>已複製 至 剪貼簿</TipText>
+        <PrimaryButton onClick={readyForSubmit ? onSubmitClick : onCopyClick}>
+          {readyForSubmit ? "立即前往申請資料！" : "複製表單內容"}
         </PrimaryButton>
       </ButtonBar>
     </>
