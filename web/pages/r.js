@@ -96,13 +96,12 @@ export default function R() {
       }
 
       if (caseAgency && caseName)
-        results.join(
+        results.push(
           `目前已知類似開放案例有「${caseAgency}」的「${caseName}」，網址連結請見此 (${caseUrl})，希望貴機關借鏡他人經驗，加速推動資料開放，回應民間需求。`,
         );
 
-      const text = `請開放 ${dataset} 的 ${fields} 資料，此資料需求 ${results.join(
-        "且",
-      )} ${recommend}`;
+      const regularization = results.join("且");
+      const text = `申請的資料集：${dataset}\n申請的資料欄位：${fields}\n\n申請原因：\n${regularization}\n${recommend}`;
 
       setResult(text);
     }
