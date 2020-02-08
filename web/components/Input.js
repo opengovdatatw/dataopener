@@ -4,6 +4,10 @@ import React from "react";
 import { useField } from "formik";
 import styled from "styled-components";
 
+const Wrapper = styled.div`
+  margin-bottom: 36px;
+`;
+
 const NativeInput = styled.input`
   background: #fff;
   border: 2px solid #cedae9;
@@ -12,11 +16,21 @@ const NativeInput = styled.input`
   color: #969696;
   letter-spacing: 0;
   width: 100%;
-  margin-bottom: 36px;
   padding: 14px;
 `;
 
+const Error = styled.div`
+  color: #ff3333;
+  padding: 3px 0;
+`;
+
 export default function Input(props) {
-  const [field] = useField(props);
-  return <NativeInput {...props} {...field} />;
+  const [field, meta] = useField(props);
+
+  return (
+    <Wrapper>
+      <NativeInput {...props} {...field} />
+      {meta.touched && meta.error ? <Error>{`* ${meta.error}`}</Error> : null}
+    </Wrapper>
+  );
 }

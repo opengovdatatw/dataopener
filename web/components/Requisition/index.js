@@ -1,4 +1,3 @@
-export { default } from "./Requisitions";
 export { default as SearchRequisition } from "./SearchRequisition";
 export { default as DataRequisition } from "./DataRequisition";
 export { default as ValueRequisition } from "./ValueRequisition";
