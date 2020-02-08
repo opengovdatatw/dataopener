@@ -55,6 +55,7 @@ export default function Search() {
           { name: "category", weight: 0.2 },
           { name: "agency", weight: 0.2 },
         ],
+        Threshold: 0.1,
         shouldSort: true,
         minMatchCharLength: 2,
       };
