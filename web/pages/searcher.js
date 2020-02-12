@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import Fuse from "fuse.js";
 import Container from "../components/Container";
@@ -39,46 +39,79 @@ const Legend = styled(ComponentLegend)`
   margin: 20px 0;
 `;
 
+const Loader = styled.div`
+  text-align: center;
+  margin: 20px 0;
+`;
+
 export default function Search() {
-  const [type] = useState("requests");
-  const [fuse, setFuse] = useState();
+  const [type, setType] = useState("requests");
+  const [requestsFuse, setRequestsFuse] = useState();
+  const [datasetsFuse, setDatasetsFuse] = useState();
+  const [keyword, setKeyword] = useState();
   const [page, setPage] = useState(1);
   const [agencies, setAgencies] = useState([]);
   const [replies, setReplies] = useState([]);
-  const [results, setResults] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const data = await fetch("/api/requests");
-      const options = {
-        keys: [
-          { name: "subject", weight: 0.8 },
-          { name: "category", weight: 0.2 },
-          { name: "agency", weight: 0.2 },
-        ],
-        threshold: 0.2,
-        shouldSort: true,
-        minMatchCharLength: 2,
-      };
+      const requests = await fetch("/api/requests");
 
-      setFuse(new Fuse(data, options));
-      setAgencies(_.uniq(_.map(data, "agency")));
-      setReplies(_.uniq(_.map(data, "reply")));
+      setRequestsFuse(
+        new Fuse(requests, {
+          keys: [
+            { name: "subject", weight: 0.6 },
+            { name: "category", weight: 0.2 },
+            { name: "agency", weight: 0.2 },
+          ],
+          threshold: 0.2,
+          shouldSort: true,
+          minMatchCharLength: 2,
+        }),
+      );
+      setAgencies(_.uniq(_.map(requests, "agency")));
+      setReplies(_.uniq(_.map(requests, "reply")));
     })();
-  }, [setFuse, setAgencies, setReplies]);
+  }, [setRequestsFuse, setAgencies, setReplies]);
+
+  useEffect(() => {
+    (async () => {
+      const datasets = await fetch("/api/datasets");
+
+      setDatasetsFuse(
+        new Fuse(datasets, {
+          keys: [
+            { name: "subject", weight: 0.3 },
+            { name: "agency", weight: 0.2 },
+            { name: "description", weight: 0.2 },
+            { name: "fields", weight: 0.3 },
+          ],
+          threshold: 0.2,
+          shouldSort: true,
+          minMatchCharLength: 2,
+        }),
+      );
+    })();
+  }, [setDatasetsFuse]);
+
+  const results = useMemo(() => {
+    const fuse = { requests: requestsFuse, datasets: datasetsFuse };
+    if (_.size(keyword) < 2 || !fuse) return [];
+    return fuse[type].search(keyword);
+  }, [type, requestsFuse, datasetsFuse, keyword, agencies, replies]);
 
   const onKeywordChange = useCallback(
     evt => {
       const { value } = evt.target;
-      if (value.length < 2 || !fuse) {
-        setResults([]);
-        return;
-      }
       setPage(1);
-      setResults(fuse.search(value));
+      setKeyword(value);
     },
-    [setResults, setPage, fuse],
+    [setKeyword],
   );
+
+  if (!requestsFuse || !datasetsFuse) {
+    return <Loader>Loading...</Loader>;
+  }
 
   const resultByPages = _.chunk(results, 10);
 
@@ -111,8 +144,24 @@ export default function Search() {
       <Container>
         <PageHeader>
           <Tabs>
-            <Tab active={type === "requests"}>我想要更多 </Tab>
-            <Tab active={type === "datasets"}>政府資料開放平台</Tab>
+            <Tab
+              active={type === "requests"}
+              onClick={() => {
+                setPage(1);
+                setType("requests");
+              }}
+            >
+              我想要更多
+            </Tab>
+            <Tab
+              active={type === "datasets"}
+              onClick={() => {
+                setPage(1);
+                setType("datasets");
+              }}
+            >
+              政府資料開放平台
+            </Tab>
           </Tabs>
           <Tip>{`搜尋結果：${results.length}`}</Tip>
         </PageHeader>
