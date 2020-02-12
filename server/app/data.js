@@ -1,6 +1,7 @@
 import _ from "lodash";
 import cors from "cors";
 import { google } from "googleapis";
+import datasets from "./datasets.json";
 
 const sheets = google.sheets({
   version: "v4",
@@ -24,7 +25,7 @@ const parseRow = rows => {
       source: row[5],
       postedAt: row[0],
       reply: _.replace(row[7], /^\w\. /, ""),
-      tags: row.slice(8).filter(s=>s.length)
+      tags: row.slice(8).filter(s => s.length),
     });
   });
 
@@ -45,6 +46,10 @@ async function fetch() {
 }
 
 export default ({ app }) => {
+  app.get("/api/datasets", cors(), async (req, res) => {
+    res.json(datasets);
+  });
+
   app.get("/api/requests", cors(), async (req, res) => {
     res.json({ data: await fetch() });
   });
