@@ -174,13 +174,21 @@ export default function Search() {
             <Legend>{result.subject}</Legend>
             <Table>
               <tr>
-                <th>派發機關</th>
+                <th>機關</th>
                 <td>{result.agency}</td>
               </tr>
-              <tr>
-                <th>回應</th>
-                <td>{result.reply}</td>
-              </tr>
+              {result.reply && (
+                <tr>
+                  <th>回應</th>
+                  <td>{result.reply}</td>
+                </tr>
+              )}
+              {result.fields && (
+                <tr>
+                  <th>欄位</th>
+                  <td>{result.fields.join(", ")}</td>
+                </tr>
+              )}
             </Table>
             <SecondaryButton target="datasource" href={result.source}>
               資料來源

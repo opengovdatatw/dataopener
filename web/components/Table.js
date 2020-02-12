@@ -20,7 +20,7 @@ const TableContainer = styled.table`
 
   & th,
   & td {
-    padding: 3px 0;
+    padding: 6px 0;
   }
 
   & th:nth-child(1),
