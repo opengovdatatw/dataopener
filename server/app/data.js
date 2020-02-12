@@ -1,7 +1,7 @@
 import _ from "lodash";
 import cors from "cors";
 import { google } from "googleapis";
-import datasets from "./datasets.json";
+import datasets from "../../datasets.json";
 
 const sheets = google.sheets({
   version: "v4",
