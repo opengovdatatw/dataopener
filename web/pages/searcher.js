@@ -2,6 +2,7 @@ import _ from "lodash";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import Fuse from "fuse.js";
+import window from "global/window";
 import Container from "../components/Container";
 import HeaderBar from "../components/HeaderBar";
 import Text, { Tip, Legend as ComponentLegend } from "../components/Text";
@@ -109,6 +110,14 @@ export default function Search() {
     [setKeyword],
   );
 
+  const onPageClick = useCallback(
+    p => {
+      setPage(p);
+      window.scrollTo(0, 0);
+    },
+    [setPage],
+  );
+
   if (!requestsFuse || !datasetsFuse) {
     return <Loader>Loading...</Loader>;
   }
@@ -196,13 +205,13 @@ export default function Search() {
           </Card>
         ))}
         <Pages>
-          <Page onClick={() => setPage(1)}>最前頁</Page>
+          <Page onClick={() => onPageClick(1)}>最前頁</Page>
           {_.map(_.range(startPage, endPage + 1), value => (
-            <Page key={`page${value}`} onClick={() => setPage(value)}>
+            <Page key={`page${value}`} onClick={() => onPageClick(value)}>
               {value}
             </Page>
           ))}
-          <Page onClick={() => setPage(resultByPages.length)}>最末頁</Page>
+          <Page onClick={() => onPageClick(resultByPages.length)}>最末頁</Page>
         </Pages>
       </Container>
     </>
