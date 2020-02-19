@@ -56,7 +56,7 @@ export default function Search() {
 
   useEffect(() => {
     (async () => {
-      const requests = await fetch("/api/requests");
+      const requests = await fetch("https://dataopener.tw/api/requests");
 
       setRequestsFuse(
         new Fuse(requests, {
@@ -77,7 +77,7 @@ export default function Search() {
 
   useEffect(() => {
     (async () => {
-      const datasets = await fetch("/api/datasets");
+      const datasets = await fetch("https://dataopener.tw/api/datasets");
 
       setDatasetsFuse(
         new Fuse(datasets, {
@@ -175,7 +175,7 @@ export default function Search() {
           <Tip>{`搜尋結果：${results.length}`}</Tip>
         </PageHeader>
         {_.map(resultByPages[page - 1], result => (
-          <Card key={result.id}>
+          <Card key={`${result.id}-${result.subject}`}>
             <CardHeader>
               <Tag>{result.category}</Tag>
               <Tip>發布時間 ----</Tip>
