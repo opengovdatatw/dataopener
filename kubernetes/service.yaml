@@ -1,17 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app: dataopener
-  name: "dataopener-production-port"
+  name: dataopener
 spec:
   externalTrafficPolicy: Cluster
   ports:
     - port: 80
       protocol: TCP
       targetPort: http
-  selector:
-    app.kubernetes.io/instance: dataopener-production
-    app.kubernetes.io/name: dataopener
   sessionAffinity: None
   type: NodePort

@@ -1,20 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: dataopener
-  name: dataopener-production
+  name: dataopener
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app.kubernetes.io/instance: dataopener-production
-      app.kubernetes.io/name: dataopener
   template:
-    metadata:
-      labels:
-        app.kubernetes.io/instance: dataopener-production
-        app.kubernetes.io/name: dataopener
     spec:
       containers:
         - image: "nginx:stable"
@@ -24,7 +14,7 @@ spec:
             valueFrom:
               configMapKeyRef:
                 key: google-sheet-key
-                name: general-gcloud
+                name: gcloud
           livenessProbe:
             httpGet:
               path: /healthz
