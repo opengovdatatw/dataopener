@@ -9,12 +9,6 @@ spec:
       containers:
         - image: "nginx:stable"
           imagePullPolicy: IfNotPresent
-          env:
-          - name: GOOGLE_SHEET_KEY
-            valueFrom:
-              configMapKeyRef:
-                key: google-sheet-key
-                name: gcloud
           livenessProbe:
             httpGet:
               path: /healthz

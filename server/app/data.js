@@ -5,7 +5,7 @@ import datasets from "../../datasets.json";
 
 const sheets = google.sheets({
   version: "v4",
-  auth: process.env.GOOGLE_SHEET_KEY || 'AIzaSyCeqGz1Nbe-LXG4SslNXchw0lAnj4fcZKs',
+  auth: "AIzaSyCeqGz1Nbe-LXG4SslNXchw0lAnj4fcZKs",
 });
 
 const spreadsheetId = "14ceZCncQGpndd8hmJwX8SrhVBFFUl41st0XFeWmSWXE";
