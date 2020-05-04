@@ -48,13 +48,11 @@ export default class MyDocument extends Document {
             color="#171B2A"
           />
           <meta name="theme-color" content="#171B2A" />
-          <link rel="stylesheet" type="text/css" href="/static/pace/pace.css" />
           <link rel="stylesheet" href="/static/css/reset.css" />
           {this.props.styleTags}
         </Head>
         <body>
           <Main />
-          <script type="text/javascript" src="/static/pace/pace.min.js" />
           <script
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${env.GA_TRACK_ID}`}
